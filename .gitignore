@@ -1,0 +1,150 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.pytype/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.Python
+pip-wheel-metadata/
+pip-log.txt
+
+# Build/distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+.wheels/
+*.manifest
+*.spec
+
+# Coverage / test outputs
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+pytest.xml
+.pyre/
+
+# Logs
+logs/
+*.log
+
+# =========================
+# OS / Editor
+# =========================
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Swap files
+*.swp
+*.swo
+
+# =========================
+# Flask / App
+# =========================
+instance/
+*.sqlite3
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# =========================
+# Frontend (optional tooling)
+# =========================
+frontend/node_modules/
+frontend/.parcel-cache/
+frontend/dist/
+frontend/build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Models and caches
+# =========================
+# Root models folder (keep folder via .gitkeep)
+models/**
+!models/.gitkeep
+
+# If some services use backend/models/
+backend/models/**
+!backend/models/.gitkeep
+
+# Common large model artifacts
+models/**/*.pt
+models/**/*.bin
+models/**/*.safetensors
+models/**/*.onnx
+models/**/*.ckpt
+models/**/*.zip
+
+backend/models/**/*.pt
+backend/models/**/*.bin
+backend/models/**/*.safetensors
+backend/models/**/*.onnx
+backend/models/**/*.ckpt
+backend/models/**/*.zip
+
+# Whisper (STT)
+models/stt/small.pt
+backend/models/stt/small.pt
+
+# Vosk (STT)
+models/stt/vosk-model-*/
+models/stt/*.zip
+backend/models/stt/vosk-model-*/
+backend/models/stt/*.zip
+
+# FastText LID
+models/lid/lid.176.bin
+backend/models/lid/lid.176.bin
+
+# Coqui TTS voices/cache
+models/tts/
+backend/models/tts/
+
+# Hugging Face / misc caches (if created inside repo)
+.cache/
+huggingface/
+
+# =========================
+# Generated media/artifacts
+# =========================
+# If you store temporary uploads or generated audio, ignore typical temp folders:
+**/tmp/
+**/temp/
+**/uploads/
+generated_audio/
+media/
+
+# Optionally ignore raw audio outputs if they are generated artifacts:
+# *.wav
+# *.mp3
+# *.flac
+# *.m4a
+# *.ogg
