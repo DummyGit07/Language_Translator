@@ -8,35 +8,35 @@ This project is an offline multilingual translation application with features in
 ## File Structure
 
 backend/
-app.py # Flask backend server with API routes
-services/
-translate_service.py # Translation logic using MarianMT models
-stt_service.py # Speech-to-text service with Whisper/Vosk
-tts_service.py # Text-to-speech service with Coqui/pyttsx3
-lang_detect.py # Language detection using fastText
-
-models/
-translation/ # Downloaded MarianMT translation models
-stt/ # Whisper/Vosk speech-to-text models
-tts/ # Coqui TTS voices
-lid/ # fastText language ID model
-
-frontend/
-templates/
-index.html # Main frontend HTML page
-static/
-css/
-styles.css # Frontend styles
-js/
-main.js # Frontend JavaScript for UI interactions
-
-scripts/
-download_models.py # Script to download models offline
-
-requirements.txt # Python dependencies file
-README.md # Project overview and setup instructions
-.env.example # Sample environment variables
-
+  app.py # Flask backend server with API routes<br>
+  services/<br>
+    translate_service.py # Translation logic using MarianMT models<br>
+    stt_service.py # Speech-to-text service with Whisper/Vosk<br>
+    tts_service.py # Text-to-speech service with Coqui/pyttsx3<br>
+    lang_detect.py # Language detection using fastText<br>
+<br>
+models/<br>
+  translation/ # Downloaded MarianMT translation models<br>
+  stt/ # Whisper/Vosk speech-to-text models<br>
+  tts/ # Coqui TTS voices<br>
+  lid/ # fastText language ID model<br>
+<br>
+frontend/<br>
+  templates/<br>
+    index.html # Main frontend HTML page<br>
+  static/<br>
+    css/<br>
+      styles.css # Frontend styles<br>
+    js/<br>
+      main.js # Frontend JavaScript for UI interactions<br>
+<br>
+scripts/<br>
+  download_models.py # Script to download models offline<br>
+<br>
+requirements.txt # Python dependencies file<br>
+README.md # Project overview and setup instructions<br>
+.env.example # Sample environment variables<br>
+<br>
 ---
 
 ## Setup and Running Instructions
@@ -99,4 +99,5 @@ You can input texts, select languages, perform translations, and use speech feat
 - OpenAI Whisper, Vosk (Speech-to-text)
 - Coqui TTS, pyttsx3 (Text-to-speech)
 - fastText Language Detection
+
 - HTML, CSS, JavaScript (Frontend)
