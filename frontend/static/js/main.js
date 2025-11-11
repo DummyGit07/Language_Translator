@@ -6,11 +6,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const translateBtn = document.getElementById("translateBtn");
   const statusDiv = document.getElementById("status");
 
-  // Fetch supported languages from backend and populate selects
+  // Supported language codes with downloaded models
+  const supportedLanguages = new Set([
+    "en", "es", "de", "it", "nl", "ru", "zh", "ar",
+    "fr", "hi", "tl", "mr", "guj", "pnb", "ml", "ori", "asm"
+    // Excluding ja, ko, ben, tam due to missing models
+  ]);
+
+  // Fetch supported languages from backend and populate dropdowns
   fetch("/api/languages")
     .then((res) => res.json())
     .then((langs) => {
       for (const [code, name] of Object.entries(langs)) {
+        if (!supportedLanguages.has(code)) {
+          continue; // Skip unsupported languages
+        }
+
         const option1 = document.createElement("option");
         option1.value = code;
         option1.textContent = name;
