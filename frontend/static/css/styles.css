@@ -1,0 +1,48 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 2rem;
+  background: #f9f9f9;
+  color: #222;
+}
+.container {
+  max-width: 700px;
+  margin: auto;
+  background: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 0.1);
+}
+.controls label {
+  margin-right: 0.5rem;
+}
+.controls select {
+  margin-right: 1rem;
+  padding: 0.3rem;
+}
+textarea {
+  width: 100%;
+  min-height: 120px;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 4px;
+}
+button:hover {
+  background: #0056b3;
+}
+#status {
+  margin-top: 1rem;
+  color: #555;
+  font-style: italic;
+}
