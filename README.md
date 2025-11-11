@@ -3,7 +3,6 @@
 ## Overview
 This project is an offline multilingual translation application with features including speech-to-text, text-to-speech, language detection, and text translation, primarily targeting Indic and popular international languages. It operates fully offline with locally cached NLP models to ensure fast, privacy-preserving translations without internet dependence.
 
----
 
 ## File Structure
 
@@ -37,7 +36,6 @@ requirements.txt # Python dependencies file<br>
 README.md # Project overview and setup instructions<br>
 .env.example # Sample environment variables<br>
 <br>
----
 
 ## Setup and Running Instructions
 
@@ -101,3 +99,4 @@ You can input texts, select languages, perform translations, and use speech feat
 - fastText Language Detection
 
 - HTML, CSS, JavaScript (Frontend)
+
