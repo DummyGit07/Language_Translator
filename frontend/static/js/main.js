@@ -18,6 +18,37 @@ document.addEventListener("DOMContentLoaded", () => {
     "fr", "hi", "tl", "mr", "guj", "pnb", "ml", "ori", "asm"
   ]);
 
+  // State variables for utterances and mediaRecorder
+  let inputUtterance = null;
+  let outputUtterance = null;
+  let mediaRecorder = null;
+  let audioChunks = [];
+
+  // Helper function to cancel all ongoing audio (speech & recording)
+  function cancelAllAudioProcesses() {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+    }
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      mediaRecorder.stop();
+      recordBtn.textContent = "Start Recording";
+      recordingStatus.textContent = "";
+    }
+    resetSpeakButtons();
+  }
+
+  // Reset Speak buttons to initial state
+  function resetSpeakButtons() {
+    if (speakInputBtn) speakInputBtn.textContent = "Start Speaking";
+    if (speakOutputBtn) speakOutputBtn.textContent = "Start Speaking";
+  }
+
+  // Centralized error popup and cancellation
+  function showErrorPopup(message) {
+    cancelAllAudioProcesses();
+    alert(message);
+  }
+
   // Populate language dropdowns
   fetch("/api/languages")
     .then(res => res.json())
@@ -37,9 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sourceLangSelect.value = "en";
       targetLangSelect.value = "hi";
     })
-    .catch(() => {
-      statusDiv.textContent = "Failed to load language list.";
-    });
+    .catch(() => showErrorPopup("Failed to load language list."));
 
   // Auto-detect language of input on input change (debounced)
   let detectTimeout;
@@ -74,7 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (!data.text) {
-      statusDiv.textContent = "Please enter text to translate.";
+      showErrorPopup("Please enter text to translate.");
+      statusDiv.textContent = "";
       return;
     }
 
@@ -86,23 +116,27 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(res => res.json())
       .then(result => {
         if (result.error) {
-          statusDiv.textContent = "Error: " + result.error;
+          showErrorPopup("Error: " + result.error);
+          statusDiv.textContent = "";
         } else {
           outputText.value = result.translated_text || "";
           statusDiv.textContent = "Translation completed.";
         }
       })
       .catch(() => {
-        statusDiv.textContent = "Translation request failed.";
+        showErrorPopup("Translation request failed.");
+        statusDiv.textContent = "";
       });
   });
 
   // Speech-to-text: record audio, convert to text only, put in input box
-  let mediaRecorder;
-  let audioChunks = [];
-
   if (recordBtn) {
     recordBtn.addEventListener("click", () => {
+      // Prevent recording if currently speaking
+      if (window.speechSynthesis.speaking) {
+        showErrorPopup("Speaking Stopped!!.");
+        return;
+      }
       if (mediaRecorder && mediaRecorder.state === "recording") {
         mediaRecorder.stop();
         recordBtn.textContent = "Start Recording";
@@ -132,43 +166,86 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then(res => res.json())
                 .then(data => {
                   if (data.error) {
-                    recordingStatus.textContent = "Error: " + data.error;
+                    showErrorPopup("Error: Permission Conflicted.");
+                    recordingStatus.textContent = "";
                   } else {
                     inputText.value = data.text || "";
                     recordingStatus.textContent = "Speech recognized.";
                   }
                 })
                 .catch(() => {
-                  recordingStatus.textContent = "Failed to get transcription.";
+                  showErrorPopup("Failed to get transcription.");
+                  recordingStatus.textContent = "";
                 });
             });
           })
           .catch(() => {
-            recordingStatus.textContent = "Microphone permission denied.";
+            showErrorPopup("Microphone permission denied.");
+            recordingStatus.textContent = "";
           });
       }
     });
   }
 
-  // Speak button for input text using browser TTS
+  // Toggleable Speak/Stop for input text
   if (speakInputBtn) {
     speakInputBtn.addEventListener("click", () => {
+      // If currently recording, prevent speaking
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        showErrorPopup("Please stop recording before speaking.");
+        return;
+      }
+      // If already speaking (input or output), cancel all to avoid overlap
+      if (window.speechSynthesis.speaking) {
+        cancelAllAudioProcesses();
+        resetSpeakButtons();
+        return;
+      }
       const text = inputText.value.trim();
       if (!text) return;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = sourceLangSelect.value;
-      window.speechSynthesis.speak(utterance);
+      inputUtterance = new SpeechSynthesisUtterance(text);
+      inputUtterance.lang = sourceLangSelect.value;
+      speakInputBtn.textContent = "Stop Speaking";
+
+      inputUtterance.onend = () => {
+        speakInputBtn.textContent = "Start Speaking";
+      };
+      inputUtterance.onerror = (e) => {
+        // showErrorPopup("Speech synthesis error: " + e.error);
+      };
+
+      window.speechSynthesis.speak(inputUtterance);
     });
   }
 
-  // Speak button for output text (translated) using browser TTS
+  // Toggleable Speak/Stop for output text
   if (speakOutputBtn) {
     speakOutputBtn.addEventListener("click", () => {
+      // If currently recording, prevent speaking
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        showErrorPopup("Please stop recording before speaking.");
+        return;
+      }
+      // If already speaking (input or output), cancel all to avoid overlap
+      if (window.speechSynthesis.speaking) {
+        cancelAllAudioProcesses();
+        resetSpeakButtons();
+        return;
+      }
       const text = outputText.value.trim();
       if (!text) return;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = targetLangSelect.value;
-      window.speechSynthesis.speak(utterance);
+      outputUtterance = new SpeechSynthesisUtterance(text);
+      outputUtterance.lang = targetLangSelect.value;
+      speakOutputBtn.textContent = "Stop Speaking";
+
+      outputUtterance.onend = () => {
+        speakOutputBtn.textContent = "Start Speaking";
+      };
+      outputUtterance.onerror = (e) => {
+        // showErrorPopup("Speech synthesis error: " + e.error);
+      };
+
+      window.speechSynthesis.speak(outputUtterance);
     });
   }
 });
